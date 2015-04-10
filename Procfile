@@ -1,0 +1,1 @@
+web: gunicorn fpt.wsgi --log-file -
