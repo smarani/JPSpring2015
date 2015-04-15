@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html>
+  <head>
+   <link href="{% static 'bootstrap-3.3.4-dist/css/bootstrap.min.css' %}"
+          rel="stylesheet" media="screen">
+    <title>Food Pantry Project</title>
+    <style type="text/css" media="all">
+        /*body {background-color:#000033;} */
+
+    </style> 
+  </head>
+
+  <body>
+<div class="container">
+    <div class="row clearfix">
+        <div class="col-md-12 column">
+            <div class="col-md-2 column>">
+            </div>
+            <div class="col-md-8 column">
+                <br><br><br><br><br>
+            <div class="jumbotron">
+            <div class="page-header">
+                <h1>
+                    Welcome! <br> <small>Please Login Here</small>
+                </h1>
+            </div>
+            <form role="form" action="{% url 'foodpantry:signin' %}" method="post" id='form1'>
+                {% csrf_token %}
+                <div class="form-group">
+                     <label for="exampleInputEmail1">Username</label><input type="username" class="form-control" id="username" name='username' />
+                </div>
+                <div class="form-group">
+                     <label for="exampleInputPassword1">Password</label><input type="password" class="form-control" id="password" name='password' />
+                </div>
+                 <button type="submit" class="btn btn-default">Submit</button>
+            </form>
+        </div>
+        <div class="col-md-2 column">
+        </div>
+        </div>
+    </div>
+    </div>
+</div>
+
+    <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+  </body>
+</html>

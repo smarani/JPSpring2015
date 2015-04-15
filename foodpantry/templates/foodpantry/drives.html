@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html>
+  <head>
+
+    <link href="{% static 'bootstrap-3.3.4-dist/css/bootstrap.min.css' %}"
+          rel="stylesheet" media="screen">
+          <script type="text/javascript" src="http://code.jquery.com/jquery-1.8.3.min.js"></script> 
+             <title>Food Pantry Project</title>
+                 <style type="text/css" media="all">
+       /* body {background-color:#FFCC99;} */
+
+    </style> 
+	<script type="text/javascript" src="{% static 'django_ajax/js/jquery.ajax.min.js' %}"></script>
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+  <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+  <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+  <script>
+  $(function() {
+    $( "#driveStartDate" ).datepicker();
+    $( "#driveEndDate" ).datepicker();
+  });
+  </script>
+
+  <script type='text/javascript'>
+  // $(document).on('click', 'a', function (e) {
+		// e.preventDefault();
+		// var cClick = $(this).parent().text()
+		// cClick = cClick.replace('x', '')
+		// var par = $(this).parent()
+		// alert(cClick.split()[0])
+		// $.ajaxSetup({data: {
+		// 	csrfmiddlewaretoken: '{{ csrf_token }}',
+		// 	driveName: cClick,
+		// 	requesting: 'remove'
+		// }});
+		// $.ajax({
+		// 	url: '/foodpantry/deletedrive/',
+  //       type: 'POST', //this is the default though, you don't actually need to always mention it
+  //       success: function(data) {
+  //       	alert(data)
+  //       	if (data=='success') {     
+  //       		alert(data); 		
+  //       		par.remove();
+
+  //       	}
+  //       },
+  //       error: function( xhr, status, errorThrown ) {
+  //       	alert( "Sorry, there was a problem! " + errorThrown + ' ' + status );
+
+  //       },
+  //   }); 
+
+
+
+		function addDrive()
+	{
+		var driveName = document.getElementById('driveName').value
+		var driveLocation = document.getElementById('driveLocation').value
+		var driveAddress = document.getElementById('driveAddress').value
+		var driveStartDate = document.getElementById('driveStartDate').value
+		var driveEndDate = document.getElementById('driveEndDate').value
+		var specialNotes = document.getElementById('specialNotes').value
+
+		// $.ajaxSetup({data: {
+		// 	csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value,
+		// 	driveName: driveName,
+		// 	driveLocation: driveLocation, 
+		// 	driveAddress: driveAddress, 
+		// 	driveStartDate: driveStartDate,
+		// 	driveEndDate: driveEndDate,
+		// 	specialNotes: specialNotes,
+		// }});
+		$.ajax({
+			url: "{% url 'foodpantry:adddrive' %}",
+	    	type: 'POST', 
+	    	data: {
+			csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value,
+			driveName: driveName,
+			driveLocation: driveLocation, 
+			driveAddress: driveAddress, 
+			driveStartDate: driveStartDate,
+			driveEndDate: driveEndDate,
+			specialNotes: specialNotes,
+		},
+
+	    success: function(data) {
+	    	if (data != 'already added') {
+	    		var str = data;
+	    		var res = str.split(',');
+	    		$('#driveList').append('<li>' + res[0] + '<a id = "test" href="">x</a></li>' );
+	    			// + '</li><ul><li>' + res[1] + '</li><li>' + 
+	    			// res[2] + '</li></ul>');  
+	    		document.getElementById('driveName').value = ''
+	    		document.getElementById('driveLocation').value = ''
+	    		document.getElementById('driveAddress').value = ''
+	    		document.getElementById('driveStartDate').value = ''
+	    		document.getElementById('driveEndDate').value = ''
+	    		document.getElementById('specialNotes').value = ''
+	    	}
+
+	    	else {
+	    		alert(data)
+	    	}
+	    },
+	    error: function( xhr, status, errorThrown ) {
+	    	alert( "Sorry, there was a problem! " + errorThrown + ' ' + status );
+
+	    },
+	}); 
+
+	}
+	</script>
+  </head>
+
+  <body>
+<div class="container">
+	<div class="row clearfix">
+		<div class="col-md-12 column">
+			<div class="page-header">
+				<h1>
+					Food PanTWEET <small>A Food Pantry Connection Application</small>
+				</h1>
+			</div>
+			<nav class="navbar navbar-default" role="navigation">
+				<div class="navbar-header">
+					 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button> 
+				</div>
+				
+				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+					<ul class="nav navbar-nav">
+						<li>
+							<a href="{% url 'foodpantry:index' %}">Home</a>
+						</li>
+						<li>
+							<a href="{% url 'foodpantry:inventory' %}">Inventory Management</a>
+						</li>
+						<li>
+							<a href="{% url 'foodpantry:drives' %}">Drive Management</a>
+						</li>
+						<li>
+							<a href="{% url 'foodpantry:editsettings' %}">Tweet Settings</a>
+						</li>
+						<li>
+							<a href="{% url 'foodpantry:quicktweet' %}">Quick Tweet</a>
+						</li>
+					</ul>
+				</div>
+			</nav>
+			<h1><center>
+					Welcome to the Drives Page!
+				</h1>
+				<p><center>
+					Here you can add and delete Drives.
+				</p>
+				<div class="row clearfix">
+					<div class='col-md-2 column'></div>
+					<div class='col-md-8 column'>
+						<form role="form"><center>
+							 {% csrf_token %}
+							 <div class="form-group">
+								<!-- ADD DEFAULTS AS SETTING!!! -->
+								 <label>Drive Name:</label>&nbsp;&nbsp;&nbsp;<input type="text" name="drivename" id='driveName'>
+							</div>
+
+							<div class='form-group'>
+							<label>Drive Location:</label>&nbsp;&nbsp;&nbsp;
+							
+							<input type="text" name="drivelocation" id='driveLocation'>
+							</div>
+							<div class='form-group'>
+							<labeL>Drive Location's Address:</labeL>&nbsp;&nbsp;&nbsp;
+							
+							<input type="text" name="drivelocationaddress" id='driveAddress'>
+						</div>
+							<div class='form-group'>
+							<label>Drive Start Date: </label>&nbsp;&nbsp;&nbsp;<input type="text" id='driveStartDate' name='startdate'>
+							</div>
+							<div class='form-group'>
+							<label>Drive End Date:</label> &nbsp;&nbsp;&nbsp;<input type="text" id='driveEndDate' name='enddate'>
+							</div>
+							<div class='form-group'>
+							<label>Special Notes:</label>&nbsp;&nbsp;&nbsp;
+							
+							<textarea name='specialnotes' id='specialNotes'> </textarea>
+						</div>
+							
+						
+							 <input type='button' onclick='addDrive()' class="btn btn-default" value='Submit Changes'></input>
+						</form>
+					
+					<br>
+						
+						
+					</div>
+					<div class='col-md-2 column'>
+						Current Drives Going On:
+						<ul id='driveList'>
+							{% for drive in current_drives %}
+								<li id='drive{{forloop.counter}}'>{{drive.name}} <a id = "test" href="">x</a>  
+								
+								<!-- <br>Start Date:{{drive.start_date}} -->
+								
+								</li>
+							{% endfor %}
+						</ul>
+				</div>
+	
+
+		</div>
+	</div>
+</div>
+
+
+ <script src="{% static 'bootstrap-3.3.4-dist/js/bootstrap.min.js' %}"></script>
+  </body>
+</html>

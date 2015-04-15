@@ -36,6 +36,9 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'foodpantry',
+    'django_ajax',
+
 )
 
 MIDDLEWARE_CLASSES = (
@@ -43,7 +46,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
+    #'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
@@ -62,6 +65,9 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+
+MEDIA_ROOT = [os.path.join(BASE_DIR, 'media')]
+MEDIA_URL = '/media/'
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/
@@ -83,7 +89,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 import dj_database_url
-DATABASES['default'] =  dj_database_url.config()
+DATABASES['default'] =  dj_database_url.config(default='postgres://eexhvsqrwpykng:dUlIDp0Vk19IPsVL306f1GfTZ7@ec2-107-20-159-103.compute-1.amazonaws.com:5432/d76ik2ip0ornkl')
 
 # Honor the 'X-Forwarded-Proto' header for request.is_secure()
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
@@ -100,3 +106,6 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
+TEMPLATE_DIRS = [os.path.join(BASE_DIR, 'foodpantry/templates/foodpantry')]
+
+

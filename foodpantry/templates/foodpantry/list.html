@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html>
+<body>
+
+<h1>Hello There</h1>
+<form action="{% url 'foodpantry:process' %}" method='post' id='form' name='form' enctype="multipart/form-data">
+    {% csrf_token %}
+     {{ form.title }}
+  Select a file: <input type="file" name="file" id='file'>
+  
+  <input type="submit">
+
+</form>
+
+
+   <!-- <form enctype="multipart/form-data" 
+                     action="{% url 'foodpantry:process' %}" method="post">
+                     {% csrf_token %}
+   <p>File: <input type="file" name="filename" /></p>
+   First Name: <input type="text" name="first_name"><br />
+   <p><input type="submit" value="Upload" /></p>
+   </form> -->
+
+</body>
+</html>

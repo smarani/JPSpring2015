@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html>
+  <head>
+
+    <link href="{% static 'bootstrap-3.3.4-dist/css/bootstrap.min.css' %}"
+          rel="stylesheet" media="screen">
+          <script type="text/javascript" src="http://code.jquery.com/jquery-1.8.3.min.js"></script> 
+             <title>Food Pantry Project</title>
+  </head>
+
+<body>
+<div class="container">
+	<div class="row clearfix">
+		<div class="col-md-12 column">
+			<div class="page-header">
+				<h1>
+					Food PanTWEET <small>A Food Pantry Connection Application</small>
+				</h1>
+			</div>
+			<nav class="navbar navbar-default" role="navigation">
+				<div class="navbar-header">
+					 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button> 
+				</div>
+				
+				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+					<ul class="nav navbar-nav">
+						<li>
+							<a href="{% url 'foodpantry:index' %}">Home</a>
+						</li>
+						<li>
+							<a href="{% url 'foodpantry:inventory' %}">Inventory Management</a>
+						</li>
+						<li>
+							<a href="{% url 'foodpantry:drives' %}">Drive Management</a>
+						</li>
+						<li>
+							<a href="{% url 'foodpantry:editsettings' %}">Tweet Settings</a>
+						</li>
+						<li>
+							<a href="{% url 'foodpantry:quicktweet' %}">Quick Tweet</a>
+						</li>
+					</ul>
+				</div>
+			</nav>
+
+
+			
+			<center>
+				<br><br>
+				<h2><i> To send a tweet type the desired tweet text into the box and click "Tweet" </i></h2><br><br>
+				<form role="form" action="{% url 'foodpantry:quicktweet' %}" method='post'>
+							{% csrf_token %}
+					<div class="form-group">
+								<!-- ADD DEFAULTS AS SETTING!!! -->
+						<label>Tweet:</label>&nbsp;&nbsp;&nbsp;<input name='tweet'/> 
+					</div>
+					<button type="submit" class="btn btn-default">Submit Changes</button>
+				</form>
+		</center>
+		</div>
+	</div>
+</div>
+ <script src="{% static 'bootstrap-3.3.4-dist/js/bootstrap.min.js' %}"></script>
+  </body>
+</html>

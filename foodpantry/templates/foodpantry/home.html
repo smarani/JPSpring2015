@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html>
+  <head>
+
+    <link href="{% static 'bootstrap-3.3.4-dist/css/bootstrap.min.css' %}"
+          rel="stylesheet" media="screen">
+          <script type="text/javascript" src="http://code.jquery.com/jquery-1.8.3.min.js"></script> 
+             <title>Food Pantry Project</title>
+             <style type="text/css" media="all">
+      		.btn-xlarge {
+    padding: 18px 28px;
+    font-size: 25px;
+    line-height: normal;
+    -webkit-border-radius: 8px;
+       -moz-border-radius: 8px;
+            border-radius: 8px;
+    }
+        /*body {background-color:#000033;} */
+
+    </style> 
+          
+  </head>
+
+  <body>
+
+<div class="container">
+	<div class="row clearfix">
+		<div class="col-md-12 column">
+			<form action="{% url 'foodpantry:timetologout' %}">
+				 <input align='right' type="submit" value="Logout" class="btn-large"></input>
+			</form>
+			<br><br><br><br><br>
+			<div class="jumbotron">
+				<h1>
+					Welcome to the Food Pantry Project
+				</h1>
+				<p>
+					Please click on the task you would like to do.
+				</p>
+				
+				<div class="row clearfix">
+					<div class="col-md-12 column">
+						<div class="row clearfix">
+							<div class="col-md-4 column">
+								<form action="{% url 'foodpantry:inventory' %}">
+								 <input type="submit" value="Upload/Edit Inventory" class="btn btn-xlarge"></input>
+								</form>
+							</div>
+							<div class="col-md-4 column">
+								<form action="{% url 'foodpantry:drives' %}">
+								 <input type="submit" value='Schedule Food Drives' class="btn btn-xlarge"></input>
+								</form>
+							</div>
+							<div class="col-md-4 column">
+								<form action="{% url 'foodpantry:editsettings' %}">
+								 <input type="submit" class="btn btn-xlarge" value="Edit Settings"></input>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+		</div>
+	</div>
+</div>
+
+ <script src="{% static 'bootstrap-3.3.4-dist/js/bootstrap.min.js' %}"></script>
+  </body>
+</html>

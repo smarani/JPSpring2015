@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html>
+  <head>
+
+    <link href="{% static 'bootstrap-3.3.4-dist/css/bootstrap.min.css' %}"
+          rel="stylesheet" media="screen">
+          <script type="text/javascript" src="http://code.jquery.com/jquery-1.8.3.min.js"></script> 
+             <title>Food Pantry Project</title>
+               <style type="text/css" media="all">
+        /*body {background-color:#000033;} */
+
+    </style> 
+
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.8.3.min.js"></script> 
+			<script src="{% static 'editablegrid-master/editablegrid.js' %}"></script>
+		<!-- [DO NOT DEPLOY] --> <script src="{% static 'editablegrid-master/editablegrid_renderers.js' %}" ></script>
+		<!-- [DO NOT DEPLOY] --> <script src="{% static 'editablegrid-master/editablegrid_editors.js' %}" ></script>
+		<!-- [DO NOT DEPLOY] --> <script src="{% static 'editablegrid-master/editablegrid_validators.js' %}" ></script>
+		<!-- [DO NOT DEPLOY] --> <script src="{% static 'editablegrid-master/editablegrid_utils.js' %}" ></script>
+		<!-- [DO NOT DEPLOY] --> <script src="{% static 'editablegrid-master/editablegrid_charts.js' %}" ></script>
+		<link rel="stylesheet" href="{% static 'editablegrid-master/editablegrid.css' %}" type="text/css" media="screen">
+		<script src="{% static 'editable-table-master/mindmup-editabletable.js' %}" ></script>
+	<script src="{% static 'editable-table-master/numeric-input-example.js' %}" ></script>
+	  <link href="{% static 'editable-table-master/external/google-code-prettify/prettify.css' %}" rel="stylesheet">
+ <script src="{% static 'editable-table-master/external/google-code-prettify/prettify.js'%}"></script>
+		<link href="index.css" rel="stylesheet">
+		
+		<style>
+		/*	body { font-family:'lucida grande', tahoma, verdana, arial, sans-serif; font-size:12px; }
+			h1 { font-size: 15px; }
+			a { color: #548dc4; text-decoration: none; }
+			a:hover { text-decoration: underline; }
+			table.testgrid { border-collapse: collapse; border: 1px solid #CCB; width: 800px; }
+			table.testgrid td, table.testgrid th { padding: 5px; border: 1px solid #E0E0E0; }
+			table.testgrid th { background: #E5E5E5; text-align: left; }
+			input.invalid { background: red; color: #FDFDFD; }*/
+		</style>
+	
+
+  </head>
+
+  <body>
+<div class="container">
+	<div class="row clearfix">
+		<div class="col-md-12 column">
+			<div class="page-header">
+				<h1>
+					Food PanTWEET <small>A Food Pantry Connection Application</small>
+				</h1>
+			</div>
+			<nav class="navbar navbar-default" role="navigation">
+				<div class="navbar-header">
+					 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button> 
+				</div>
+				
+				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+					<ul class="nav navbar-nav">
+						<li>
+							<a href="{% url 'foodpantry:index' %}">Home</a>
+						</li>
+						<li>
+							<a href="{% url 'foodpantry:inventory' %}">Inventory Management</a>
+						</li>
+						<li>
+							<a href="{% url 'foodpantry:drives' %}">Drive Management</a>
+						</li>
+						<li>
+							<a href="{% url 'foodpantry:editsettings' %}">Tweet Settings</a>
+						</li>
+						<li>
+							<a href="{% url 'foodpantry:quicktweet' %}">Quick Tweet</a>
+						</li>
+					</ul>
+				</div>
+			</nav>	
+	<div class="row clearfix">
+		<div class="col-md-12 column">
+		<div class='col-md-3 column'>
+			</br>
+			</br>
+			</br>
+			</br>
+			<h3>Upload a new inventory:</h3>
+			<form action="{% url 'foodpantry:inventory' %}" method='post' id='form' name='form' enctype="multipart/form-data"><center>
+			    {% csrf_token %}
+			     {{ form.title }}
+			     <div>
+			  Select a file: <input type="file" name="file" id='file'>
+			  </div>
+			  <input type="submit">
+
+			</form>
+
+		</div>
+		<div class='col-md-9 column'>
+			<h2><center><u> Current Inventory </u></center></h2>
+			<table style="width:100%" id='testgrid' class='table table-condensed table-responsive'>
+				<tr>
+					<th>DESCRIPTION</th>
+					<th>CURRENT QUANTITY</th>
+					<th>OPTIMAL QUANTITY</th>
+					<th>CHANGE</th>
+					<th>DEFICIT</th>
+					<th>PRIORITY</th>
+				</tr>
+			  {% for thing1 in rows %}
+			  {% for thing2 in thing1 %}
+			  <tr id='{{ forloop.parentloop.counter }}{{ forloop.counter }}'>
+			  	{% for thing3 in thing2 %}
+			  	{% if forloop.parentloop.first %}
+			    <th>{{ thing3 }}</th>
+			    {% else %}
+				<td>{{ thing3 }}</td>
+			    {% endif %}
+			    {% endfor %}
+			  </tr>
+			 
+			  {% endfor %}
+			  <tr>
+        </tr>
+        {% endfor %}
+				
+			</table>
+		
+	</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+// <script>
+//   $('#testgrid').editableTableWidget({cloneProperties: ['background', 'border', 'outline']});
+//   $('#testgrid').editableTableWidget({editor: $('<textarea>')});
+//   $('#testgrid').editableTableWidget({
+// 	cloneProperties: ['background', 'border', 'outline']
+// });
+//   window.prettyPrint && prettyPrint();
+// </script>
+
+ <script src="{% static 'bootstrap-3.3.4-dist/js/bootstrap.min.js' %}"></script>
+  </body>
+</html>
