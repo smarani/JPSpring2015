@@ -133,7 +133,7 @@ def toTweet(itemType, default_string, food_item):
 	elif itemType == 'drive':
 		new_string = default_string.replace('*NAME*', food_item.name)
 		new_string = new_string.replace('*LOCATION*', str(food_item.location))
-		new_string = new_string.replace('*ADDRESS*'), str(food_item.address)
+		new_string = new_string.replace('*ADDRESS*', str(food_item.address))
 		new_string = new_string.replace("*STARTDATE*", str(food_item.start_date))
 		new_string = new_string.replace('*DURATION*', str(food_item.duration))
 	return new_string
@@ -157,10 +157,7 @@ def checkValidDrive(item, freq_week_before, freq_week_during):
 
 def checkValid(item, freq_week):	
 	last_tweet = item.last_tweeted
-	print item.last_tweeted
 	difference = timezone.now() - last_tweet
-	print difference
-	print freq_week
 	if abs(difference.days) > 365:
 		return True
 	if abs(difference.days) == freq_week:

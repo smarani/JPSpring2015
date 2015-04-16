@@ -23,6 +23,6 @@ class Command(BaseCommand):
 				api.update_status(status=thing.tweet)
 				history = PastTweets(tweet=thing.tweet, date=timezone.now())
 				history.save()
-				t.delete()
+				thing.delete()
 		except:
-			pass
+			print 'error!'

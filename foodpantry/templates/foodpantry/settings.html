@@ -71,6 +71,7 @@
 	    success: function(data) {
 	    	if (data != 'already added') {
 	    		$('#templatelist').append('<li>' + userinput + '    ' + '<button class=littlebutton>delete</button></li>');
+	    		userinput.value = ''
 	    	}
 	    	else {
 	    		alert(data)
