@@ -7,6 +7,8 @@
           rel="stylesheet" media="screen">
           <script type="text/javascript" src="http://code.jquery.com/jquery-1.8.3.min.js"></script> 
              <title>Food Pantry Project</title>
+             <link href="http://fonts.googleapis.com/css?family=Ubuntu:bold" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=Vollkorn" rel="stylesheet" type="text/css">
                  <style type="text/css" media="all">
        /* body {background-color:#FFCC99;} */
 
@@ -15,6 +17,8 @@
   <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
   <script src="//code.jquery.com/jquery-1.10.2.js"></script>
   <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+
+  <link rel="stylesheet" type="text/css" href="{% static 'foodstyle.css' %}">
   <script>
   $(function() {
     $( "#driveStartDate" ).datepicker();
@@ -23,35 +27,37 @@
   </script>
 
   <script type='text/javascript'>
-  // $(document).on('click', 'a', function (e) {
-		// e.preventDefault();
-		// var cClick = $(this).parent().text()
-		// cClick = cClick.replace('x', '')
-		// var par = $(this).parent()
-		// alert(cClick.split()[0])
-		// $.ajaxSetup({data: {
-		// 	csrfmiddlewaretoken: '{{ csrf_token }}',
-		// 	driveName: cClick,
-		// 	requesting: 'remove'
-		// }});
-		// $.ajax({
-		// 	url: '/foodpantry/deletedrive/',
-  //       type: 'POST', //this is the default though, you don't actually need to always mention it
-  //       success: function(data) {
-  //       	alert(data)
-  //       	if (data=='success') {     
-  //       		alert(data); 		
-  //       		par.remove();
 
-  //       	}
-  //       },
-  //       error: function( xhr, status, errorThrown ) {
-  //       	alert( "Sorry, there was a problem! " + errorThrown + ' ' + status );
+  function deleteThis() {
+  $('ul').on('click', 'button', function (e) {
 
-  //       },
-  //   }); 
+		e.preventDefault();
+		var cClick = $(this).parent().text()
+		cClick = cClick.replace('delete', '')
+		var par = $(this).parent()
+		alert(cClick)
+		$.ajaxSetup({data: {
+			csrfmiddlewaretoken: '{{ csrf_token }}',
+			driveName: cClick,
+			requesting: 'remove'
+		}});
+		$.ajax({
+			url: '/foodpantry/deletedrive/',
+        type: 'POST', //this is the default though, you don't actually need to always mention it
+        success: function(data) {
+        	if (data=='success') {     		
+        		par.remove();
 
+        	}
+        },
+        error: function( xhr, status, errorThrown ) {
+        	alert( "Sorry, there was a problem! " + errorThrown + ' ' + status );
 
+        },
+    }); 
+
+ }); }
+  $(document).ready(deleteThis);
 
 		function addDrive()
 	{
@@ -88,7 +94,7 @@
 	    	if (data != 'already added') {
 	    		var str = data;
 	    		var res = str.split(',');
-	    		$('#driveList').append('<li>' + res[0] + '<a id = "test" href="">x</a></li>' );
+	    		$('#driveList').append('<li>' + res[0] + '&nbsp;<button class="littlebutton">delete</button></li>' );
 	    			// + '</li><ul><li>' + res[1] + '</li><li>' + 
 	    			// res[2] + '</li></ul>');  
 	    		document.getElementById('driveName').value = ''
@@ -110,6 +116,7 @@
 	}); 
 
 	}
+	
 	</script>
   </head>
 
@@ -152,11 +159,11 @@
 				</h1>
 				<p><center>
 					Here you can add and delete Drives.
-				</p>
+				</p></center><br>
 				<div class="row clearfix">
 					<div class='col-md-2 column'></div>
-					<div class='col-md-8 column'>
-						<form role="form"><center>
+					<div class='col-md-5 column'>
+						<form role="form">
 							 {% csrf_token %}
 							 <div class="form-group">
 								<!-- ADD DEFAULTS AS SETTING!!! -->
@@ -186,18 +193,18 @@
 						</div>
 							
 						
-							 <input type='button' onclick='addDrive()' class="btn btn-default" value='Submit Changes'></input>
+							 <input type='button' onclick='addDrive()' class="btn btn-default" value='Add Drive'></input>
 						</form>
 					
 					<br>
 						
 						
 					</div>
-					<div class='col-md-2 column'>
+					<div class='col-md-4 column'>
 						Current Drives Going On:
 						<ul id='driveList'>
 							{% for drive in current_drives %}
-								<li id='drive{{forloop.counter}}'>{{drive.name}} <a id = "test" href="">x</a>  
+								<li>{{drive.name}} &nbsp;<button class='littlebutton'>delete</button>
 								
 								<!-- <br>Start Date:{{drive.start_date}} -->
 								

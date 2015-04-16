@@ -5,72 +5,82 @@
 
     <link href="{% static 'bootstrap-3.3.4-dist/css/bootstrap.min.css' %}"
           rel="stylesheet" media="screen">
+          <link href="http://fonts.googleapis.com/css?family=Ubuntu:bold" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=Vollkorn" rel="stylesheet" type="text/css">
           <script type="text/javascript" src="http://code.jquery.com/jquery-1.8.3.min.js"></script> 
              <title>Food Pantry Project</title>
-                 <style type="text/css" media="all">
-        /*body {background-color:#000033;} 
-*/
-    </style> 
-
+              
+    <link rel="stylesheet" type="text/css" href="{% static 'foodstyle.css' %}">
 	<script type='text/javascript' src="{% static 'jquery-1.11.1.min.js' %}"></script>
+	<script type='text/javascript'>$.backstretch("/static/img/back_pattern.png");</script>
 
 	<script type='text/javascript'>
 
-	// $(document).on('click', 'a', function (e) {
+	function deleteThis() {
+	$('ul').on('click', 'button', function (e) {
 
-	// 	e.preventDefault();
-	// 	var cClick = $(this).parent().text()
-	// 	cClick = cClick.replace('x', '')
-	// 	var par = $(this).parent()
-	// 	$.ajaxSetup({data: {
-	// 		csrfmiddlewaretoken: '{{ csrf_token }}',
-	// 		CourseToAdd: cClick,
-	// 		thing: 'remove'
-	// 	}});
-	// 	$.ajax({
-	// 		url: '/foodpantry/removeTweet',
- //        type: 'POST', //this is the default though, you don't actually need to always mention it
- //        success: function(data) {
- //        	//alert(data)
- //        	if (data=='success') {
- //        		par.remove();
- //        	}
- //        },
- //        error: function( xhr, status, errorThrown ) {
- //        	alert( "Sorry, there was a problem! " + errorThrown + ' ' + status );
+		e.preventDefault();
+		var cClick = $(this).parent().text()
+		
+		cClick = cClick.replace(' delete', '')
+		cClick = cClick.replace('delete', '')
+		var par = $(this).parent()
+		$.ajaxSetup({data: {
+			csrfmiddlewaretoken: '{{ csrf_token }}',
+			tweetTemplate: cClick,
+			addordelete: 'delete'
+		}});
+		$.ajax({
+			url: "{% url 'foodpantry:addtweettemplate' %}",
+        type: 'POST', //this is the default though, you don't actually need to always mention it
+        success: function(data) {
+        	
+        	if (data=='success') {
+        		par.remove();
+        	}
+        },
+        error: function( xhr, status, errorThrown ) {
+        	alert( "Sorry, there was a problem! " + errorThrown + ' ' + status );
 
- //        },
- //    }); 
+        },
+    }); 
 
 
-	// });
+	});}$(document).ready(deleteThis);
 
 		function addTemplate()
 	{
 		var userinput = document.getElementById('template1').value
-		$('#templatelist').append('<li>' + userinput + '    ' + '<a id = "test" href="">x</a></li>');
-	// 	$.ajaxSetup({data: {
-	// 		csrfmiddlewaretoken: '{{ csrf_token }}',
-	// 		tweetTemplate: userinput,
-	// 		category: 'food'
-	// 	}});
-	// 	$.ajax({
-	// 		url: '/planner/addtweettemplate/',
-	//     	type: 'POST', 
+		
+		var val = $('.choice:checked').val();
+		if (val == undefined){
+			alert('Please choose what type of template this is.');
+		}
+		else{
+		
+		$.ajaxSetup({data: {
+			csrfmiddlewaretoken: '{{ csrf_token }}',
+			tweetTemplate: userinput,
+			category: val,
+			addordelete:'add'
+		}});
+		$.ajax({
+			url: "{% url 'foodpantry:addtweettemplate' %}",
+	    	type: 'POST', 
 
-	//     success: function(data) {
-	//     	if (data != 'already added') {
-	    		  
-	//     	}
-	//     	else {
-	//     		alert(data)
-	//     	}
-	//     },
-	//     error: function( xhr, status, errorThrown ) {
-	//     	alert( "Sorry, there was a problem! " + errorThrown + ' ' + status );
+	    success: function(data) {
+	    	if (data != 'already added') {
+	    		$('#templatelist').append('<li>' + userinput + '    ' + '<button class=littlebutton>delete</button></li>');
+	    	}
+	    	else {
+	    		alert(data)
+	    	}
+	    },
+	    error: function( xhr, status, errorThrown ) {
+	    	alert( "Sorry, there was a problem! " + errorThrown + ' ' + status );
 
-	//     },
-	// }); 
+	    },
+	}); }
 
 	}
 	</script>
@@ -79,7 +89,7 @@
 
   <body>
 
-<div class="container">
+<div class="container-narrow">
 	<div class="row clearfix">
 		<div class="col-md-12 column">
 			<div class="page-header">
@@ -110,6 +120,11 @@
 							<a href="{% url 'foodpantry:quicktweet' %}">Quick Tweet</a>
 						</li>
 					</ul>
+					<ul class="nav navbar-nav navbar-right">
+						<li>
+							<a href="{% url 'foodpantry:timetologout' %}">Logout</a>
+						</li>
+					</ul>	
 				</div>
 			</nav>
 				<h1><center>
@@ -146,9 +161,9 @@
 							</div>
 							 <!-- <div class="col-md-6 column"> -->
 							<div class="form-group">
-								 <label>Tweet frequency for high priority tweets:</label> Every <input type="number"  name="freq_hp" min='1' max='100' value='2'/> days <br>
-								 <label>Tweet frequency for normal priority tweets:</label> Every <input type="number"  name="freq_np" min='1' max='100' value='5'/> days <br>
-								 <label>Tweet frequency for low priority tweets:</label> Every <input type="number"  name="freq_lp" min='1' max='100' value='8'/> days <br>
+								 <label>Tweet frequency for high priority tweets:</label> Every <input type="number"  name="freq_hp" min='1' max='100' value='{{setting.freq_hp}}'/> days <br>
+								 <label>Tweet frequency for normal priority tweets:</label> Every <input type="number"  name="freq_np" min='1' max='100' value='{{setting.freq_np}}'/> days <br>
+								 <label>Tweet frequency for low priority tweets:</label> Every <input type="number"  name="freq_lp" min='1' max='100' value='{{setting.freq_lp}}'/> days <br>
 							</div>
 							<!-- <div class="col-md-6 column"> -->
 							<div class="form-group">
@@ -162,34 +177,39 @@
 								 Every other day during&nbsp;&nbsp;<input type="checkbox" name='everyother'/><br>
 								 <label>Custom:</label> Every <input type="number" name="custom" min='1' max='100'/> days <br>
 							</div>
+							<div class="row clearfix">
+							<div class='col-md-7 column'>
 							<div class="form-group">
 							<label>To make a Tweet Template, type the tweet in the box below.  Use *NAME*, *DEFICIT*, *PRIORITY*, *OPTIMAL_NUMBER*, *CURRENT_NUMBER*,*LOCATION*, *START DATE*, *DURATION*.</label>
-							<input name='template1' id='template1'> </input>&nbsp;&nbsp;
-							<input type="radio">&nbsp;Food
-							<input type="radio">&nbsp;Drive
-							<input type="radio">&nbsp;Thank you
-							<input type='button' class='btn btn-small' onclick='addTemplate()' value='Add Tweet Template'></input>
+							<textarea name='template1' id='template1' rows="4" cols="50" maxlength='140'></textarea>&nbsp;&nbsp;<br>
+							<input type="radio" name='choiceRadio' value='food' class='choice'>&nbsp;Food
+							<input type="radio" name='choiceRadio' value='drive' class='choice'>&nbsp;Drive
+							<input type="radio" name='choiceRadio' value='thanks' class='choice'>&nbsp;Thank you
+							
+							<br><br><input type='button' class='btn btn-small' onclick='addTemplate()' value='Add Tweet Template'></input>
 							<br><br><br>
 								</div>
-							 <button type="submit" class="btn btn-default">Submit Changes</button>
-						</form>
+							 
 					</div>
-					<div class="col-md-2 column">
-						<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+				
+					<div class="col-md-5 column">
+						
 						<label>Current Tweet Templates</label>
 							<ul id='templatelist'>
-
 									{% for thing in templates %}
-									<li> {{ thing.tweet }} <a id = "test" href="">x</a></li>
+									<li> {{ thing.tweet }} <button class='littlebutton'>delete</button></li>
 									{% endfor %}
 							</ul>	
 					</div>
+
 				</div>
+				<button type="submit" class="btn btn-default">Submit Changes</button>
+						</form>
 			</div>
 
 		<!-- </div> -->
 	</div>
-</div><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
 
  <script src="{% static 'bootstrap-3.3.4-dist/js/bootstrap.min.js' %}"></script>
   </body>

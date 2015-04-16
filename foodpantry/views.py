@@ -46,14 +46,24 @@ def signin(request):
 		return render(request, 'foodpantry/login.html')
 
 def addtweettemplate(request):
-	try:
-		tweet = request.POST['tweetTemplate']
-		category = request.POST['category']
-		t = TweetOptions(upload_date=timezone.now(), tweet = tweet, category = category)
-		t.save()
-		#return HttpResponse(t.tweet)
-	except:
-		return HttpResponse('error')
+	if request.POST['addordelete'] == 'add':		
+		try:
+			tweet = request.POST['tweetTemplate']
+			category = request.POST['category']
+			t = TweetOptions(upload_date=timezone.now(), tweet = tweet, category = category)
+			t.save()
+			return HttpResponse('worked!')
+		except:
+			return HttpResponse('error')
+	elif request.POST['addordelete'] == 'delete':
+		#return HttpResponse(len(request.POST['tweetTemplate']))
+		try:
+			tweet = request.POST['tweetTemplate'].strip()
+			t = TweetOptions.objects.get(tweet = tweet.lstrip())
+			t.delete()
+			return HttpResponse('success')
+		except:
+			return HttpResponse('error')
 
 def changesettings(request):
 	if request.method == 'POST':
@@ -148,10 +158,7 @@ def adddrive(request):
 
 def deletedrive(request):
 	if request.method=='POST':
-		return HttpResponse(request.POST['driveName'].strip())
 		d = Drives.objects.get(name=request.POST['driveName'].strip())
-		return HttpResponse('here')
-
 		d.delete()
 		return HttpResponse('success')
 	

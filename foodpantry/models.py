@@ -51,7 +51,7 @@ class Frequency(models.Model):
 class TweetOptions(models.Model):
     upload_date = models.DateTimeField('date published', default=timezone.now)
     tweet = models.CharField(max_length=140)
-    #food or drive
+    #food or drive or thanks
     category = models.CharField(max_length=50)
 
 class Tweets(models.Model):
