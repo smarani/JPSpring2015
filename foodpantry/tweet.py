@@ -38,7 +38,7 @@ def tweetThanks(item):
 	driveTweets = TweetOptions.objects.filter(category='thanks')
 	i = 0
 	for thing in item:
-		status = driveTweets[i].tweet.replace('*FOOD*', thing.name)
+		status = driveTweets[i].tweet.replace('*NAME*', thing.name)
 		api.update_status(status=status)
 		i+=1
 		if (i >= driveTweets.count()):
@@ -144,6 +144,7 @@ def checkValidDrive(item, freq_week_before, freq_week_during):
 	in_drive = timezone.now()-item.start_date
 	if in_drive.days > item.duration:
 		item.delete()
+		return False
 	if in_drive.days > 0:
 		for thing in freq_week_during:
 			if difference.days == thing.number_of_days:

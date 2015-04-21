@@ -14,9 +14,11 @@ def handle_uploaded_file(f):
 	in_group = False
 	total_sum = 0
 	cur_group_Item = ''
-	
+	count = 0
 	for row_index in range(sheet.nrows):
-		if (sheet.cell(row_index, 0).value == ''):
+		if count == 0:
+			count += 1
+		elif (sheet.cell(row_index, 0).value == ''):
 			update_Group_Sum(cur_group_Item, total_sum)
 			in_group = False
 			cur_group = ''

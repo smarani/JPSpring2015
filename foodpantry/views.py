@@ -80,6 +80,7 @@ def changesettings(request):
 			max_per_day=max_per_day, change_for_thanks=change_for_thanks, upload_date=timezone.now(), freq_hp=freq_hp, 
 			freq_np=freq_np, freq_lp=freq_lp)
 		t.save()
+
 		try:
 			if request.POST['1week']:
 				f = Frequency(number_of_days=7, category='before', settings=t)
@@ -131,10 +132,20 @@ def changesettings(request):
 
 def editsettings(request):
 	setting = TweetSettings.objects.all()[TweetSettings.objects.count() - 1]
-	return render(request, 'foodpantry/settings.html', {'setting':setting, 'templates':TweetOptions.objects.all()})
+	freq_drives = setting.frequency_set.all()
+	dic = {7:'1week', 5:'5days', 3:'3days', 2:'2days', 1:'1day', 10:'every', 20:'everyother'}
+	lis = []
+	for thing in freq_drives:
+		if thing.category=='during':
+			thing.number_of_days = thing.number_of_days*10
+		lis.append(dic[thing.number_of_days])
+
+	return render(request, 'foodpantry/settings.html', {'setting':setting, 'lis':lis, 'templates':TweetOptions.objects.all()})
 
 def drives(request):
 	all_drives = Drives.objects.all()
+	for thing in all_drives:
+		thing.start_date = thing.start_date.strftime("%m/%d/%Y")
 	return render(request, 'foodpantry/drives.html', {'current_drives':all_drives})
 
 def timetologout(request):
@@ -153,7 +164,7 @@ def adddrive(request):
 		thing = name+location+address+str(start_date)+str(duration.days)+notes
 		d = Drives(name=name, location=location, address = address, start_date=start_date, duration=duration.days, notes=notes)
 		d.save()
-		returnValue = name+','+location+','+address+','+str(start_date)+','+str(duration.days)+notes
+		returnValue = name+','+location+','+address+','+start_date.strftime("%m/%d/%Y")+','+str(duration.days)+','+notes
 		return HttpResponse(returnValue)
 
 def deletedrive(request):

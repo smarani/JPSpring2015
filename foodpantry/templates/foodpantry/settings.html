@@ -16,6 +16,14 @@
 
 	<script type='text/javascript'>
 
+	// function checkBoxes() {
+	// 	var list = {{ lis }}
+	// 	for (i=0; i<list.length; i++){
+	// 		var thing = document.getElementsByName(list[i])[0]
+	// 		thing.attr('checked', true);
+	// 	}
+	// }
+
 	function deleteThis() {
 	$('ul').on('click', 'button', function (e) {
 
@@ -71,7 +79,8 @@
 	    success: function(data) {
 	    	if (data != 'already added') {
 	    		$('#templatelist').append('<li>' + userinput + '    ' + '<button class=littlebutton>delete</button></li>');
-	    		userinput.value = ''
+	    		document.getElementById('template1').value = ''
+
 	    	}
 	    	else {
 	    		alert(data)
@@ -169,7 +178,7 @@
 							<!-- <div class="col-md-6 column"> -->
 							<div class="form-group">
 									 <label>Drive Reminder Frequency: (check all that apply)</label><br>
-								 1 week before &nbsp; &nbsp;<input type="checkbox" name='1week' checked/><br>
+								 1 week before &nbsp; &nbsp;<input type="checkbox" name='1week'checked/><br>
 								 5 days before&nbsp;&nbsp;<input type="checkbox" name='5days'/><br>
 								 3 days before&nbsp;&nbsp;<input type="checkbox" name='3days'/><br>
 								 2 days before&nbsp;&nbsp;<input type="checkbox" name='2days'checked/><br>

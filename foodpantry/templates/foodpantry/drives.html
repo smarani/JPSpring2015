@@ -33,9 +33,9 @@
 
 		e.preventDefault();
 		var cClick = $(this).parent().text()
-		cClick = cClick.replace('delete', '')
+
+		cClick = cClick.substr(0, cClick.indexOf("delete"));
 		var par = $(this).parent()
-		
 		$.ajaxSetup({data: {
 			csrfmiddlewaretoken: '{{ csrf_token }}',
 			driveName: cClick,
@@ -89,14 +89,11 @@
 			driveEndDate: driveEndDate,
 			specialNotes: specialNotes,
 		},
-
 	    success: function(data) {
 	    	if (data != 'already added') {
 	    		var str = data;
 	    		var res = str.split(',');
-	    		$('#driveList').append('<li>' + res[0] + '&nbsp;<button class="littlebutton">delete</button></li>' );
-	    			// + '</li><ul><li>' + res[1] + '</li><li>' + 
-	    			// res[2] + '</li></ul>');  
+	    		$('#driveList').append('<li>' + res[0] + '&nbsp;<button class="littlebutton">delete</button><br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Start Date:&nbsp;' + res[3]+ '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Duration:&nbsp;' + res[4] + ' days <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Location:&nbsp;' + res[1] + '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Address:&nbsp;' + res[2] + '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Notes:&nbsp;' + res[5] + '<br><br> + </li>' );
 	    		document.getElementById('driveName').value = ''
 	    		document.getElementById('driveLocation').value = ''
 	    		document.getElementById('driveAddress').value = ''
@@ -211,7 +208,12 @@
 							{% for drive in current_drives %}
 								<li>{{drive.name}} &nbsp;<button class='littlebutton'>delete</button>
 								
-								<!-- <br>Start Date:{{drive.start_date}} -->
+								 <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Start Date:&nbsp;{{drive.start_date}}
+								 <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Duration:&nbsp;{{drive.duration}} days
+								 <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Location:&nbsp;{{drive.location}}
+								 <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Address:&nbsp;{{drive.address}}
+								 <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Notes:&nbsp;{{drive.notes}}
+								 <br>
 								
 								</li>
 							{% endfor %}
